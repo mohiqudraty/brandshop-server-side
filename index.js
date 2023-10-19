@@ -35,16 +35,18 @@ async function run() {
     // POST  ----------------------
     app.post("/products", async (req, res) => {
       const newProduct = req.body;
-      console.log(newProduct);
+      // console.log(newProduct);
       const result = await productCollection.insertOne(newProduct);
-      console.log(result);
+      // console.log(result);
       res.send(result);
     });
 
     //Get ----------------------------
-    app.get("/products", async (req, res) => {
-      const cursor = productCollection.find();
-      const result = await cursor.toArray();
+    app.get("/products/:brandName", async (req, res) => {
+      const brandName = req.params.brandName;
+      const query = { brandName: brandName };
+      const result = await productCollection.find(query).toArray();
+      console.log(query);
       res.send(result);
     });
 
