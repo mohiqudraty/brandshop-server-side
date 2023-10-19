@@ -32,7 +32,16 @@ async function run() {
     const database = client.db("brandShopDB");
     const productCollection = database.collection("products");
 
-    //Get
+    // POST  ----------------------
+    app.post("/products", async (req, res) => {
+      const newProduct = req.body;
+      console.log(newProduct);
+      const result = await productCollection.insertOne(newProduct);
+      console.log(result);
+      res.send(result);
+    });
+
+    //Get ----------------------------
     app.get("/products", async (req, res) => {
       const cursor = productCollection.find();
       const result = await cursor.toArray();
