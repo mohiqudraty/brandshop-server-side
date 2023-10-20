@@ -31,13 +31,22 @@ async function run() {
     // database and collections
     const database = client.db("brandShopDB");
     const productCollection = database.collection("products");
+    const cartCollection = database.collection("carts");
 
     // POST  ----------------------
+    // add product---
     app.post("/products", async (req, res) => {
       const newProduct = req.body;
       // console.log(newProduct);
       const result = await productCollection.insertOne(newProduct);
       // console.log(result);
+      res.send(result);
+    });
+
+    // add to cart
+    app.post("/carts", async (req, res) => {
+      const product = req.body;
+      const result = await cartCollection.insertOne(product);
       res.send(result);
     });
 
