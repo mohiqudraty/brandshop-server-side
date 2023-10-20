@@ -50,12 +50,39 @@ async function run() {
       res.send(result);
     });
 
-    // update product
+    // update product----------------
+    //get
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.findOne(query);
       res.send(result);
+    });
+
+    // put
+    app.put("/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateProduct = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedProduct = {
+        $set: {
+          image: updateProduct.image,
+          name: updateProduct.name,
+          brandName: updateProduct.brandName,
+          type: updateProduct.type,
+          price: updateProduct.price,
+          rating: updateProduct.rating,
+        },
+      };
+
+      const result = await productCollection.updateOne(
+        filter,
+        updatedProduct,
+        options
+      );
+      res.send(result);
+      console.log(result);
     });
 
     // Send a ping to confirm a successful connection
