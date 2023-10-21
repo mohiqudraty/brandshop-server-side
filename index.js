@@ -30,6 +30,7 @@ async function run() {
 
     // database and collections
     const database = client.db("brandShopDB");
+
     const productCollection = database.collection("products");
     const cartCollection = database.collection("carts");
 
@@ -50,7 +51,9 @@ async function run() {
       res.send(result);
     });
 
-    //Get ----------------------------
+    //Get ----------------------------------
+
+    // get product for specific brand
     app.get("/products/:brandName", async (req, res) => {
       const brandName = req.params.brandName;
       const query = { brandName: brandName };
@@ -59,7 +62,24 @@ async function run() {
       res.send(result);
     });
 
-    // update product----------------
+    // get carts data-----------------
+    app.get("/carts/:email", async (req, res) => {
+      const email = req.params.email;
+
+      const query = { email: email };
+      const result = await cartCollection.find(query).toArray();
+      res.send(result);
+      // console.log(email, query, result);
+    });
+    // delete cart item
+    app.delete("/carts/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cartCollection.deleteOne(query);
+      res.send(result);
+      // console.log(result, query);
+    });
+    // update product-------------------------------------
     //get
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
